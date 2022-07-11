@@ -18,6 +18,8 @@ class CreateMobilTable extends Migration
             $table->string('mesin');
             $table->decimal('kapasitas_penumpang');
             $table->string('tipe');
+            $table->decimal('stok');
+            $table->collection('kendaraan');
         });
     }
 

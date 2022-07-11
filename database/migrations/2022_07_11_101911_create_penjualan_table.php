@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMotorTable extends Migration
+class CreatePenjualanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateMotorTable extends Migration
      */
     public function up()
     {
-        Schema::create('motor', function (Blueprint $table) {
+        Schema::create('penjualan', function (Blueprint $table) {
             $table->id();
-            $table->string('mesin');
-            $table->string('tipe_suspensi');
-            $table->string('tipe_transmisi');
-            $table->decimal('stok');
-            $table->collection('kendaraan');
+            $table->index('id_kendaraan');
+            $table->decimal('stok_terjual');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ class CreateMotorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('motor');
+        Schema::dropIfExists('penjualan');
     }
 }
