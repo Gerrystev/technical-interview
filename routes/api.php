@@ -31,7 +31,10 @@ function ($router) {
 Route::group([
     'middleware' => 'api',
     'namespace' => 'App\Http\Controllers',
+    'prefix' => 'kendaraan'
 ],
 function ($router) {
-    Route::get('/kendaraan/stok', [\App\Http\Controllers\KendaraanController::class, 'checkStock']); 
+    Route::get('stok', 'KendaraanController@checkStock');
+    Route::post('penjualan', 'KendaraanController@sellStock');
+    Route::get('laporan', 'KendaraanController@soldReport'); 
 });
