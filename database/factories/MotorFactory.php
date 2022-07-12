@@ -22,7 +22,8 @@ class MotorFactory extends Factory
             'mesin'=> $this->faker->text(10),
             'tipe_suspensi' => $this->faker->text(10),
             'tipe_transmisi'=> $this->faker->text(10),
-            'stok'=> $this->faker->numberBetween(1, 10)
+            'stok'=> 5,
+            'terjual' => 0,
         ];
     }
 }

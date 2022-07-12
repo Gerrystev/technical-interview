@@ -22,7 +22,8 @@ class MobilFactory extends Factory
             'mesin'=> $this->faker->text(10),
             'kapasitas_penumpang' => $this->faker->numberBetween(2, 8),
             'tipe'=> $this->faker->text(10),
-            'stok'=> $this->faker->numberBetween(1, 10)
+            'stok'=> 5,
+            'terjual' => 0,
         ];
     }
 }
