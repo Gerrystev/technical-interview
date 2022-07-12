@@ -18,8 +18,9 @@ class CreateMotorTable extends Migration
             $table->string('mesin');
             $table->string('tipe_suspensi');
             $table->string('tipe_transmisi');
-            $table->decimal('stok');
             $table->collection('kendaraan');
+            $table->decimal('stok');
+            $table->decimal('terjual');
         });
     }
 
