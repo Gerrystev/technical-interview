@@ -119,7 +119,7 @@ class AppTest extends TestCase
         return $tokenArray;
     }
 
-    public function test_invalidrefreshTokenA()
+    public function test_invalidRefreshTokenA()
     {
         // load session
         $token = 'tokenxx';
@@ -153,9 +153,10 @@ class AppTest extends TestCase
             '/api/kendaraan/stok'
         );
 
-        $firstId = $response->getData()->mobil[0]->_id;
+        $firstIdMobil = $response->getData()->mobil[0]->_id;
+        $firstIdMotor = $response->getData()->motor[0]->_id;
 
-        $tokenArray = array($token, $tokenType, $firstId);
+        $tokenArray = array($token, $tokenType, $firstIdMobil, $firstIdMotor);
 
         $response
             ->assertHeader('content-type', 'application/json')
@@ -201,11 +202,104 @@ class AppTest extends TestCase
     /**
      * @depends test_CheckStock
      */
-    public function test_SellStock($tokenArray)
+    public function test_InvalidIdSellStock($tokenArray)
     {
         $token = $tokenArray[0];
         $tokenType = $tokenArray[1];
         $firstId = $tokenArray[2];
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => $tokenType . ' ' . $token
+        ])->postJson(
+            '/api/kendaraan/penjualan',
+            [
+                '_id' => 'xxxxxx',
+                'terjual' => 1000
+            ]
+        );
+
+        $response
+            ->assertHeader('content-type', 'application/json')
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertExactJson([
+                'status' => false,
+                'message' => 'Id not found',
+            ]);
+
+        return $tokenArray;
+    }
+
+    /**
+     * @depends test_CheckStock
+     */
+    public function test_InvalidSellStock($tokenArray)
+    {
+        $token = $tokenArray[0];
+        $tokenType = $tokenArray[1];
+        $firstId = $tokenArray[2];
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => $tokenType . ' ' . $token
+        ])->postJson(
+            '/api/kendaraan/penjualan',
+            [
+                '_id' => $firstId,
+                'terjual' => 1000
+            ]
+        );
+
+        $response
+            ->assertHeader('content-type', 'application/json')
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertExactJson([
+                'status' => false,
+                'message' => 'Barang terjual melebihi stok',
+            ]);
+
+        return $tokenArray;
+    }
+
+    /**
+     * @depends test_CheckStock
+     */
+    public function test_SellStockMobil($tokenArray)
+    {
+        $token = $tokenArray[0];
+        $tokenType = $tokenArray[1];
+        $firstId = $tokenArray[2];
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => $tokenType . ' ' . $token
+        ])->postJson(
+            '/api/kendaraan/penjualan',
+            [
+                '_id' => $firstId,
+                'terjual' => 3
+            ]
+        );
+
+        $response
+            ->assertHeader('content-type', 'application/json')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'status'  => true,
+                'message' => 'Stok terjual!',
+            ]);
+
+        return $tokenArray;
+    }
+
+    /**
+     * @depends test_CheckStock
+     */
+    public function test_SellStockMotor($tokenArray)
+    {
+        $token = $tokenArray[0];
+        $tokenType = $tokenArray[1];
+        $firstId = $tokenArray[3];
 
         $response = $this->withHeaders([
             'Accept' => 'application/json',
