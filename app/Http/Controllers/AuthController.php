@@ -22,18 +22,33 @@ class AuthController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'username'    => 'required|string',
+                'username' => 'required|string',
                 'password' => 'required|string|',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(
-                [$validator->errors()],
+                [
+                    'status' => false,
+                    'message' => $validator->errors()
+                ],
                 Response::HTTP_BAD_REQUEST
             );
         }
 
+        // check duplicate username
+        $userQuery = User::where('username', $request->username)->get();
+        if($userQuery->count() > 0) {
+            return response()->json(
+                [
+                    'status' => false,
+                    'message' => 'Username sudah ada!',
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        
         $user = User::create(
             array_merge(
                 $validator->validated(),
@@ -41,7 +56,10 @@ class AuthController extends Controller
             )
         );
 
-        return response()->json(['message' => 'Success']);
+        return response()->json([
+            'status' => true,
+            'message' => 'Success'
+        ], Response::HTTP_CREATED);
 
     }
 
@@ -51,7 +69,7 @@ class AuthController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'username'    => 'required|string',
+                'username' => 'required|string',
                 'password' => 'required|string',
             ]
         );
@@ -65,7 +83,10 @@ class AuthController extends Controller
         $this->guard()->factory()->setTTL($token_validity);
 
         if (!$token = $this->guard()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->respondWithToken($token);
@@ -77,7 +98,10 @@ class AuthController extends Controller
     {
         $this->guard()->logout();
 
-        return response()->json(['message' => 'Logged out!']);
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged out!'
+        ]);
 
     }
 
@@ -85,7 +109,6 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken($this->guard()->refresh());
-
     }
 
     protected function respondWithToken($token)
