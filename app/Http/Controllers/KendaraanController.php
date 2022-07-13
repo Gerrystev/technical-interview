@@ -21,10 +21,10 @@ class KendaraanController extends Controller
 
     public function checkStock() 
     {
-        $mobil = Mobil::query()->get();
+        $mobil = Mobil::where('stok', '>', 0)->get();
         $mobil = $mobil->makeHidden('terjual')->toArray();
 
-        $motor = Motor::query()->get();
+        $motor = Motor::where('stok', '>', 0)->get();
         $motor = $motor->makeHidden('terjual')->toArray();
 
         return response()->json(
@@ -35,11 +35,11 @@ class KendaraanController extends Controller
         );
     }
 
-    private function addSoldReport($table, $id, $banyak_penjualan) {
+    private function addSoldReport($table, $id, $terjual) {
         $query = $table->first();
         // decrease with sell value
         // if stock < sell value, remove row id from stock
-        if($query->stok < $banyak_penjualan) {
+        if($query->stok < $terjual) {
             return response()->json(
                 [
                     'status'  => false,
@@ -50,8 +50,8 @@ class KendaraanController extends Controller
         }
         else {
             // update sold stock
-            $table->decrement('stok', $banyak_penjualan);
-            $table->increment('terjual', $banyak_penjualan);
+            $table->decrement('stok', $terjual);
+            $table->increment('terjual', $terjual);
         }
 
         return response()->json(
@@ -68,7 +68,7 @@ class KendaraanController extends Controller
             $request->all(),
             [
                 '_id' => 'required|string',
-                'banyak_penjualan' => 'required|integer',
+                'terjual' => 'required|integer',
             ]
         );
 
@@ -83,20 +83,20 @@ class KendaraanController extends Controller
         }
 
         $id = $request->_id;
-        $banyak_penjualan = $request->banyak_penjualan;
+        $terjual = $request->terjual;
 
         // check if vehicle id in mobil
         $mobil = Mobil::where('_id', $id);
         $mobilQuery = $mobil->get();
         if($mobilQuery->count() > 0) {
-            return $this->addSoldReport($mobil, $id, $banyak_penjualan);
+            return $this->addSoldReport($mobil, $id, $terjual);
         }
 
         // check if vehicle id in motor
         $motor = Motor::where('_id', $id);
         $motorQuery = $motor->get();
         if ($motorQuery->count() > 0) {
-            return $this->addSoldReport($motor, $id, $banyak_penjualan);
+            return $this->addSoldReport($motor, $id, $terjual);
         }
 
         // return error
@@ -111,10 +111,10 @@ class KendaraanController extends Controller
 
     public function soldReport()
     {
-        $mobil = Mobil::query()->get();
+        $mobil = Mobil::where('terjual', '>', 0)->get();
         $mobil = $mobil->makeHidden('stok')->toArray();
 
-        $motor = Motor::query()->get();
+        $motor = Motor::where('terjual', '>', 0)->get();
         $motor = $motor->makeHidden('stok')->toArray();
 
         return response()->json(
