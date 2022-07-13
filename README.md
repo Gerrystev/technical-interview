@@ -32,28 +32,28 @@ Dalam bab berikut terdapat beberapa api yang digunakan:
 |Refresh Token	|api/auth/refresh	   |Yes|
 |Logout         |api/auth/logout	   |Yes|
 
-**api/auth/register**
-Method	: POST__
-Body		: __
+**api/auth/register**<br />
+Method	: POST <br />
+Body		: 
 
     username	: string
     password	: string
     
-**api/auth/login**
-Method	: POST__
-Body		:__
+**api/auth/login** <br />
+Method	: POST <br />
+Body		:
 
     username	: string
     password	: string
 
-**api/auth/refresh**
+**api/auth/refresh** <br />
 
-Method	: POST__
-Body		: None__
+Method	: POST <br />
+Body		: None 
 
-**api/auth/logout**
-Method	: POST__
-Body		: None__
+**api/auth/logout** <br />
+Method	: POST <br />
+Body		: None <br />
 
 ## Kendaraan
 |Nama Halaman    |Routing             |Authorization Bearer Token |
@@ -62,18 +62,18 @@ Body		: None__
 |Penjualan Stok     |api/kendaraan/penjualan        |Yes|
 |Laporan Penjualan	|api/kendaraan/laporan	   |Yes|
 
-**api/kendaraan/stok**
-Method	: GET__
-Body		: None__
+**api/kendaraan/stok** <br />
+Method	: GET <br />
+Body		: None 
 
-**api/kendaraan/penjualan**
+**api/kendaraan/penjualan** <br />
 
-Method	: POST__
-Body		: None__
+Method	: POST <br />
+Body		: None 
 
     _id: string id dari id stok
     banyak_penjualan: integer
 
-**api/kendaraan/laporan**
-Method	: GET__
+**api/kendaraan/laporan** <br />
+Method	: GET <br />
 Body		: None
