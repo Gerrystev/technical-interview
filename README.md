@@ -33,27 +33,27 @@ Dalam bab berikut terdapat beberapa api yang digunakan:
 |Logout         |api/auth/logout	   |Yes|
 
 **api/auth/register**
-Method	: POST
-Body		: 
+Method	: POST__
+Body		: __
 
     username	: string
     password	: string
     
 **api/auth/login**
-Method	: POST
-Body		: 
+Method	: POST__
+Body		:__
 
     username	: string
     password	: string
 
 **api/auth/refresh**
 
-Method	: POST
-Body		: None
+Method	: POST__
+Body		: None__
 
 **api/auth/logout**
-Method	: POST
-Body		: None
+Method	: POST__
+Body		: None__
 
 ## Kendaraan
 |Nama Halaman    |Routing             |Authorization Bearer Token |
@@ -63,17 +63,17 @@ Body		: None
 |Laporan Penjualan	|api/kendaraan/laporan	   |Yes|
 
 **api/kendaraan/stok**
-Method	: GET
-Body		: None
+Method	: GET__
+Body		: None__
 
 **api/kendaraan/penjualan**
 
-Method	: POST
-Body		: None
+Method	: POST__
+Body		: None__
 
     _id: string id dari id stok
     banyak_penjualan: integer
 
 **api/kendaraan/laporan**
-Method	: GET
+Method	: GET__
 Body		: None
