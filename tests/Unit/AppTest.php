@@ -141,6 +141,22 @@ class AppTest extends TestCase
     /**
      * @depends test_refreshTokenA
      */
+    public function test_CheckStockWithoutAuthorization($tokenArray)
+    {
+        $response = $this->withHeaders([
+            'Accept' => 'application/json'
+        ])->getJson(
+            '/api/kendaraan/stok'
+        );
+
+        $response
+            ->assertHeader('content-type', 'application/json')
+            ->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+    
+    /**
+     * @depends test_refreshTokenA
+     */
     public function test_CheckStock($tokenArray)
     {
         $token = $tokenArray[0];
