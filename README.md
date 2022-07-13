@@ -72,7 +72,7 @@ Method	: POST <br />
 Body		: None 
 
     _id: string id dari id stok
-    banyak_penjualan: integer
+    terjual: integer
 
 **api/kendaraan/laporan** <br />
 Method	: GET <br />
